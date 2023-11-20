@@ -34,6 +34,9 @@ class Application(tk.Tk):
         frame = self.frames[state]
         frame.tkraise()
 
+    def getData(self):
+        if self isinstance Vars2:
+
 
 #=====================================================================================================================================
 #creating the different frames that will run as different states within the app
@@ -229,16 +232,70 @@ class kmap(tk.Frame):
         label = tk.Label(self, text="Y")
         label.grid(row=0, column=0)
 
-        literals = ["A", "B", "C", "D"]
 
-
-
-        if(vars == 2):
-            
-
-        for i in range(vars):
-            temp = tk.Label(self, text=literals[i])
-            temp.grid(row=1, column=1+i)
+        if (vars == 2):
+            for r in range(numRows):
+                for c in range(numColumns):
+                    if(r == 0 and c == 1):
+                        term = tk.Label(self, text="!B")
+                        term.grid(row=r, column=c)
+                    if(r == 0 and c == 2):
+                        term = tk.Label(self, text="B")
+                        term.grid(row=r, column=c)
+                    if(r == 1 and c == 0):
+                        term = tk.Label(self, text="!A")
+                        term.grid(row=r, column=c)
+                    if(r == 2 and c == 0):
+                        term = tk.Label(self, text="A")
+                        term.grid(row=r, column=c)
+        if (vars == 3):
+            for r in range(numRows):
+                for c in range(numColumns):
+                    if(r == 0 and c == 1):
+                        term = tk.Label(self, text="!C")
+                        term.grid(row=r, column=c)
+                    if(r == 0 and c == 2):
+                        term = tk.Label(self, text="C")
+                        term.grid(row=r, column=c)
+                    if(r == 1 and c == 0):
+                        term = tk.Label(self, text="!A!B")
+                        term.grid(row=r, column=c)
+                    if(r == 2 and c == 0):
+                        term = tk.Label(self, text="!AB")
+                        term.grid(row=r, column=c)
+                    if(r == 3 and c == 0):
+                        term = tk.Label(self, text="AB")
+                        term.grid(row=r, column=c)
+                    if(r == 4 and c == 0):
+                        term = tk.Label(self, text="A!B")
+                        term.grid(row=r, column=c)
+        if (vars == 4):
+            for r in range(numRows):
+                for c in range(numColumns):
+                    if(r == 0 and c == 1):
+                        term = tk.Label(self, text="!C!D")
+                        term.grid(row=r, column=c)
+                    if(r == 0 and c == 2):
+                        term = tk.Label(self, text="!CD")
+                        term.grid(row=r, column=c)
+                    if(r == 0 and c == 3):
+                        term = tk.Label(self, text="CD")
+                        term.grid(row=r, column=c)
+                    if(r == 0 and c == 4):
+                        term = tk.Label(self, text="C!D")
+                        term.grid(row=r, column=c)
+                    if(r == 1 and c == 0):
+                        term = tk.Label(self, text="!A!B")
+                        term.grid(row=r, column=c)
+                    if(r == 2 and c == 0):
+                        term = tk.Label(self, text="!AB")
+                        term.grid(row=r, column=c)
+                    if(r == 3 and c == 0):
+                        term = tk.Label(self, text="AB")
+                        term.grid(row=r, column=c)
+                    if(r == 4 and c == 0):
+                        term = tk.Label(self, text="A!B")
+                        term.grid(row=r, column=c)
 
 
 #this method allows us to change the string representation of a binary number 
