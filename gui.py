@@ -8,7 +8,7 @@ class Application(tk.Tk):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
         self.title("K-Map Generator")
-        self.geometry('600x800')
+        self.geometry('500x500')
 
         #this creates a frame called box which taxes up the whole window
         box = tk.Frame(self)
@@ -34,10 +34,6 @@ class Application(tk.Tk):
         frame = self.frames[state]
         frame.tkraise()
 
-    def getData(self):
-        if self isinstance Vars2:
-
-
 #=====================================================================================================================================
 #creating the different frames that will run as different states within the app
 
@@ -47,18 +43,18 @@ class Menu(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         #creating wigets
-        header = tk.Label(self, text = "K-Map Generator", background = 'blue')
-        Var2Btn = tk.Button(self, text="2 Variables", background = 'red', command=lambda: controller.show_frame(Vars2))
-        Var3Btn = tk.Button(self, text="3 Variables", background = 'green', command=lambda: controller.show_frame(Vars3))
-        Var4Btn = tk.Button(self, text="4 Variables", background = 'yellow', command=lambda: controller.show_frame(Vars4))
+        header = tk.Label(self, text = "K-Map Generator", font=("Arial", 20))
+        Var2Btn = tk.Button(self, text="2 Variables", command=lambda: controller.show_frame(Vars2))
+        Var3Btn = tk.Button(self, text="3 Variables", command=lambda: controller.show_frame(Vars3))
+        Var4Btn = tk.Button(self, text="4 Variables", command=lambda: controller.show_frame(Vars4))
 
         #defining the grid
-        self.columnconfigure((0, 1, 2), weight = 1)
-        self.rowconfigure(0, weight = 5)
-        self.rowconfigure(1, weight = 3, pad= 10)
+        self.columnconfigure((0, 1, 2), weight = 2)
+        self.rowconfigure(0, weight = 3)
+        self.rowconfigure(1, weight = 3, pad= 5)
 
         #adding elements 
-        header.grid(row=0, column=0, columnspan = 3, sticky='nsew', padx=100, pady = 20)
+        header.grid(row=0, column=0, columnspan = 3, sticky='nsew')
         Var2Btn.grid(row=1, column=0)
         Var3Btn.grid(row=1, column=1)
         Var4Btn.grid(row=1, column=2)
@@ -69,11 +65,11 @@ class Vars2(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         #creating wigits
-        label = tk.Label(self, text="vars 2")
+        label = tk.Label(self, text="2 Variables")
         backBtn = tk.Button(self, text="Back", command=lambda: controller.show_frame(Menu))
-        genBtn = tk.Button(self, text="Generate")
         table = truthTable(self, 2)
-        k = kmap(self, 2)
+        k = kmap(self, 2, table)
+        genBtn = tk.Button(self, text="Generate", command=lambda: k.generateMap())
 
         #defining the grid
         self.columnconfigure((0, 1), weight=1)
@@ -94,11 +90,11 @@ class Vars3(tk.Frame):
         tk.Frame.__init__(self, parent)
         
         #creating wigits
-        label = tk.Label(self, text="vars 3")
+        label = tk.Label(self, text="3 Variables")
         backBtn = tk.Button(self, text="Back", command=lambda: controller.show_frame(Menu))
-        genBtn = tk.Button(self, text="Generate")
         table = truthTable(self, 3)
-        k = kmap(self, 3)
+        k = kmap(self, 3, table)
+        genBtn = tk.Button(self, text="Generate", command=lambda: k.generateMap())
 
         #defining the grid
         self.columnconfigure((0, 1), weight=1)
@@ -119,11 +115,11 @@ class Vars4(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         #creating wigits
-        label = tk.Label(self, text="vars 4")
+        label = tk.Label(self, text="4 Variables")
         backBtn = tk.Button(self, text="Back", command=lambda: controller.show_frame(Menu))
-        genBtn = tk.Button(self, text="Generate")
         table = truthTable(self, 4)
-        k = kmap(self, 4)
+        k = kmap(self, 4, table)
+        genBtn = tk.Button(self, text="Generate", command=lambda: k.generateMap())
 
         #defining the grid
         self.columnconfigure((0, 1), weight=1)
@@ -189,8 +185,7 @@ class truthTable(tk.Frame):
                 self.btns.append(btn0)
                 self.btns.append(btn1)
                 self.btns.append(btnx)
-                btn0.select
-      
+                btn0.select    
 
         #adding the rest of the elements to the truth table
         for r in range(2, numRows):
@@ -205,27 +200,32 @@ class truthTable(tk.Frame):
                         binaryNum = addBits(binaryNum, vars)
                         bitLabel = tk.Label(self, text=binaryNum[c-1])
                         bitLabel.grid(row=r, column=c)
+                        
+    def getBtnInfo(self):
+        return self.btnVal
 
 #=====================================================================================================================================
 #creating the actual Kmap that will be filled in from user input
 class kmap(tk.Frame):
-    def __init__(self, parent, vars):
+    def __init__(self, parent, vars, table):
         tk.Frame.__init__(self, parent)
 
+        self.info = table.getBtnInfo()
+
         #creating the necessary number of columns and rows
-        numRows = 3
-        numColumns = 3
+        self.numRows = 3
+        self.numColumns = 3
 
         if(vars == 3):
-            numRows += 2
+            self.numRows += 2
         elif(vars == 4):
-            numRows += 2
-            numColumns +=2 
+            self.numRows += 2
+            self.numColumns +=2 
 
         #defining the gird of the kmap
-        for c in range(int(numColumns)):
+        for c in range(int(self.numColumns)):
             self.columnconfigure(c, weight=1)
-        for r in range(int(numRows)):
+        for r in range(int(self.numRows)):
             self.rowconfigure(r, weight=1)
 
         #making the y label
@@ -234,8 +234,8 @@ class kmap(tk.Frame):
 
 
         if (vars == 2):
-            for r in range(numRows):
-                for c in range(numColumns):
+            for r in range(self.numRows):
+                for c in range(self.numColumns):
                     if(r == 0 and c == 1):
                         term = tk.Label(self, text="!B")
                         term.grid(row=r, column=c)
@@ -249,8 +249,8 @@ class kmap(tk.Frame):
                         term = tk.Label(self, text="A")
                         term.grid(row=r, column=c)
         if (vars == 3):
-            for r in range(numRows):
-                for c in range(numColumns):
+            for r in range(self.numRows):
+                for c in range(self.numColumns):
                     if(r == 0 and c == 1):
                         term = tk.Label(self, text="!C")
                         term.grid(row=r, column=c)
@@ -270,8 +270,8 @@ class kmap(tk.Frame):
                         term = tk.Label(self, text="A!B")
                         term.grid(row=r, column=c)
         if (vars == 4):
-            for r in range(numRows):
-                for c in range(numColumns):
+            for r in range(self.numRows):
+                for c in range(self.numColumns):
                     if(r == 0 and c == 1):
                         term = tk.Label(self, text="!C!D")
                         term.grid(row=r, column=c)
@@ -297,6 +297,35 @@ class kmap(tk.Frame):
                         term = tk.Label(self, text="A!B")
                         term.grid(row=r, column=c)
 
+    def generateMap(self):
+        strings = []
+        for element in self.info:
+            temp = element.get()
+            strings.append(temp)
+
+        index = 0
+
+        for r in range(1, self.numRows):
+            for c in range(1, self.numColumns):
+                savedIndex = index
+
+                if(r == 3):
+                    index += self.numColumns-1
+                if(c == 3):
+                    index+=1
+
+                temp = tk.Label(self, text=strings[index])
+                temp.grid(row=r, column=c)
+
+                index = savedIndex 
+                index+=1
+                if(c == 3):
+                    index-=1
+
+            if(self.numColumns == 5):
+                index+=1
+            if(r ==3):
+                index -= (self.numColumns-1)
 
 #this method allows us to change the string representation of a binary number 
 # to a desiered number of bits by adding zeros to the front of the binary number
@@ -309,7 +338,6 @@ def addBits(binaryNum, n):
             output = "0" + output
 
     return output
-
 
 #running the application
 app = Application()
